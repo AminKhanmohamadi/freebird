@@ -18,6 +18,10 @@
     <!-- Jquery context menu -->
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.contextMenu.min.css">
+    <!-- Css Upload Modal -->
+    <link rel="stylesheet" href="{% static 'css/upload-modal.css' %}">
+    
+
 </head>
 <body class="hold-transition dark-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
 <div class="wrapper">
@@ -88,6 +92,10 @@
 
     <!-- Main Footer -->
     {% include 'inc/footer.html' %}
+
+    {% include 'inc/modals.html' %}
+
+
 </div>
 <!-- ./wrapper -->
 
@@ -116,5 +124,9 @@
 
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="{% static 'js/dashboard2.js' %}"></script>
+
+<!-- Js Upload Modal -->
+<script src="{% static 'js/modal-upload.js' %}"></script>
+
 </body>
 </html>
