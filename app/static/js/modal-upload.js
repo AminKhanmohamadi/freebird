@@ -1,31 +1,49 @@
+var uploadedFileName;
+
+function updateProgressBar(progressId, progress) {
+    const progressBar = $(`#${progressId}`);
+    progressBar.attr('style', `width: ${progress}%`);
+    progressBar.attr('aria-valuenow', progress);
+    if (progress === 100) {
+        progressBar.addClass('bg-success');
+    }
+}
+
+
 function uploadProgressHandler(event) {
     var percent = (event.loaded / event.total) * 100;
-    var progress = Math.round(percent)
+    var progress = Math.round(percent);
     $('#modal-upload-progressbar-percentage').html(progress + '%' + " | " + humanFileSize(event.loaded) + " bytes of " + humanFileSize(event.total));
 }
 
 function loadHandler(event) {
     var percent = (event.loaded / event.total) * 100;
-    var progress = Math.round(percent)
+    var progress = Math.round(percent);
     $('#modal-upload-progressbar').attr('style', 'width: ' + progress + '%;');
     $('#modal-upload-progressbar').attr('aria-valuenow', progress + '');
     if (progress == 100) {
         $('#modal-upload-progressbar').attr('class', 'progress-bar bg-success');
+        $('#modal-listof-uploaded').prepend("<a href='#' class='list-group-item list-group-item-success text-success'>"+uploadedFileName+"</a>");
+
     }
 }
+
+
 
 function errorHandler(event) {
     $('#modal-upload-progressbar').attr('class', 'progress-bar bg-danger');
     $('#modal-upload-progressbar').attr('style', 'width: 100%;');
     $('#modal-upload-progressbar').attr('aria-valuenow', '100');
-    $('#modal-upload-progressbar-percentage').html('Upload Failed')
+    $('#modal-upload-progressbar-percentage').html('Upload Failed');
+    $('#modal-listof-uploaded').prepend("<a href='#' class='list-group-item list-group-item-success text-danger'>"+uploadedFileName+"</a>");
 }
 
 function abortHandler(event) {
     $('#modal-upload-progressbar').attr('class', 'progress-bar bg-warning');
     $('#modal-upload-progressbar').attr('style', 'width: 100%;');
     $('#modal-upload-progressbar').attr('aria-valuenow', '100');
-    $('#modal-upload-progressbar-percentage').html('Upload Aborted')
+    $('#modal-upload-progressbar-percentage').html('Upload Aborted');
+    $('#modal-listof-uploaded').prepend("<a href='#' class='list-group-item list-group-item-success text-warning'>"+uploadedFileName+"</a>");
 }
 
 
@@ -43,6 +61,8 @@ function abortHandler(event) {
         console.log("Uploading files:", files);
 
         for (let i = 0; i < files.length; i++) {
+            var file = files[i];
+            uploadedFileName = file.name;
             var form = new FormData();
             form.append("file", files[i]);
             var accessToken = getCookie('jc');
