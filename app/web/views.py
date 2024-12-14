@@ -39,3 +39,24 @@ class UploadFileView(APIView):
             'data': None
         }
         return Response(content ,status=status.HTTP_201_CREATED)
+
+
+class CreateFolderView(APIView):
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (JWTAuthentication,)
+    def post(self, request):
+        userFolderName = request.FILES.get('folder-name')
+        pwd = request.POST.get('pwd')
+
+        file_type = user_file.content_type
+        new_file = Object()
+        new_file.owner = request.user
+        new_file.name = userFolderName
+        new_file.type = 'folder'
+        new_file.path = pwd
+        new_file.save()
+        content = {
+            'msg':'Success create folder',
+            'data': None
+        }
+        return Response(content ,status=status.HTTP_201_CREATED)
