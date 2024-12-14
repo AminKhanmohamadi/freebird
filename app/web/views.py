@@ -15,6 +15,7 @@ from web.models import Object
 def homeview(request):
     response =render(request, 'web/home.html')
     refresh = RefreshToken.for_user(request.user)
+    response.set_cookie('pwd' , '/root')
     response.set_cookie('jr' , str(refresh))
     response.set_cookie('jc' , str(refresh.access_token))
     return response

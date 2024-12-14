@@ -12,7 +12,9 @@ var $ = jQuery;
                         console.log(m);
                         if (key == "uploadfile"){
                             $('#modal-upload-file').modal('toggle');
-                        };
+                        }else if (key == 'newfolder'){
+                            $('#modal-create-folder').modal('toggle');
+                        }
                     },
                     items: {
                         "uploadfile": { name: "Upload File", icon: "fas fa-file-upload" },
