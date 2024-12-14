@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.db import models
-
+from extensions.utils import convert_size
 
 
 # Create your models here.
@@ -18,8 +18,8 @@ class Object(models.Model):
     name = models.CharField(max_length=150, verbose_name='Name')
     type = models.CharField(max_length=10, choices=TYPE_CHOICES, verbose_name='Type')
     uploadfile = models.FileField(upload_to=upload_to, verbose_name='File' , null=True, blank=True)
-    size = models.PositiveIntegerField(verbose_name='Size' , null=True, blank=True)
-    path = models.TextField(verbose_name='Path')
+    size = models.CharField(max_length=20,verbose_name='Size' , null=True, blank=True)
+    path = models.TextField(verbose_name='Path' , null=True, blank=True)
     trash = models.BooleanField(default=False, verbose_name='Is Trash')
     stared = models.BooleanField(default=False, verbose_name='Is Stared')
     shared = models.BooleanField(default=False, verbose_name='Is Shared')
@@ -34,5 +34,6 @@ class Object(models.Model):
 
     def save(self, *args, **kwargs):
         if self.uploadfile:
-            self.size = self.uploadfile.size / 1024
+            self.size = convert_size(self.uploadfile.size)
+            self.path = self.uploadfile.path
         super().save(*args, **kwargs)
