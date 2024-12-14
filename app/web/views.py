@@ -25,14 +25,16 @@ class UploadFileView(APIView):
     authentication_classes = (JWTAuthentication,)
     def post(self, request):
         user_file = request.FILES.get('file')
+        file_type = user_file.content_type
         new_file = Object()
         new_file.owner = request.user
         new_file.name = user_file.name.split(".")[0]
         new_file.type = 'file'
+        new_file.file_type = file_type
         new_file.uploadfile = user_file
         new_file.save()
         content = {
             'msg':'Success upload file',
-            'data': new_file.name
+            'data': None
         }
         return Response(content ,status=status.HTTP_201_CREATED)

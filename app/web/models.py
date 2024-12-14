@@ -18,6 +18,7 @@ class Object(models.Model):
     name = models.CharField(max_length=150, verbose_name='Name')
     type = models.CharField(max_length=10, choices=TYPE_CHOICES, verbose_name='Type')
     uploadfile = models.FileField(upload_to=upload_to, verbose_name='File' , null=True, blank=True)
+    file_type = models.CharField(max_length=100, blank=True, null=True)
     size = models.CharField(max_length=20,verbose_name='Size' , null=True, blank=True)
     path = models.TextField(verbose_name='Path' , null=True, blank=True)
     trash = models.BooleanField(default=False, verbose_name='Is Trash')

@@ -8,4 +8,4 @@ from web.models import Object
 @admin.register(Object)
 class ObjectAdmin(admin.ModelAdmin):
     model = Object
-    list_display = ['owner' , 'name' , 'type' , 'size']
+    list_display = ['owner' , 'name' , 'type' , 'size' , 'file_type']
