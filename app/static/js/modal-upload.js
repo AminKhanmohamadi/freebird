@@ -1,22 +1,31 @@
 function uploadProgressHandler(event) {
     var percent = (event.loaded / event.total) * 100;
     var progress = Math.round(percent)
-    console.log(progress)
-    $('#modal-upload-progressbar').attr('style', 'width: ' + progress + '%;');
-    $('#modal-upload-progressbar').attr('aria-valuenow', progress + '');
     $('#modal-upload-progressbar-percentage').html(progress + '%' + " | " + humanFileSize(event.loaded) + " bytes of " + humanFileSize(event.total));
 }
 
 function loadHandler(event) {
-
+    var percent = (event.loaded / event.total) * 100;
+    var progress = Math.round(percent)
+    $('#modal-upload-progressbar').attr('style', 'width: ' + progress + '%;');
+    $('#modal-upload-progressbar').attr('aria-valuenow', progress + '');
+    if (progress == 100) {
+        $('#modal-upload-progressbar').attr('class', 'progress-bar bg-success');
+    }
 }
 
 function errorHandler(event) {
-
+    $('#modal-upload-progressbar').attr('class', 'progress-bar bg-danger');
+    $('#modal-upload-progressbar').attr('style', 'width: 100%;');
+    $('#modal-upload-progressbar').attr('aria-valuenow', '100');
+    $('#modal-upload-progressbar-percentage').html('Upload Failed')
 }
 
 function abortHandler(event) {
-
+    $('#modal-upload-progressbar').attr('class', 'progress-bar bg-warning');
+    $('#modal-upload-progressbar').attr('style', 'width: 100%;');
+    $('#modal-upload-progressbar').attr('aria-valuenow', '100');
+    $('#modal-upload-progressbar-percentage').html('Upload Aborted')
 }
 
 
@@ -28,7 +37,6 @@ function abortHandler(event) {
 
     var dropZone = document.getElementById('drop-zone');
     var uploadForm = document.getElementById('js-upload-form');
-
 
 
     var startUpload = function (files) {
@@ -50,7 +58,7 @@ function abortHandler(event) {
                 "processData": false,
                 "mimeType": "multipart/form-data",
                 "contentType": false,
-                "data": form ,
+                "data": form,
                 xhr: function () {
                     var xhr = new window.XMLHttpRequest();
                     xhr.upload.addEventListener("progress",
