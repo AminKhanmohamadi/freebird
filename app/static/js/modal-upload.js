@@ -1,3 +1,25 @@
+function uploadProgressHandler(event) {
+    var percent = (event.loaded / event.total) * 100;
+    var progress = Math.round(percent)
+    console.log(progress)
+    $('#modal-upload-progressbar').attr('style', 'width: ' + progress + '%;');
+    $('#modal-upload-progressbar').attr('aria-valuenow', progress + '');
+    $('#modal-upload-progressbar-percentage').html(progress + '%' + " | " + humanFileSize(event.loaded) + " bytes of " + humanFileSize(event.total));
+}
+
+function loadHandler(event) {
+
+}
+
+function errorHandler(event) {
+
+}
+
+function abortHandler(event) {
+
+}
+
+
 +function ($) {
     'use strict';
 
@@ -7,21 +29,8 @@
     var dropZone = document.getElementById('drop-zone');
     var uploadForm = document.getElementById('js-upload-form');
 
-    function getCookie(name) {
-        let cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            const cookies = document.cookie.split(';');
-            for (let i = 0; i < cookies.length; i++) {
-                const cookie = cookies[i].trim();
-                // کوکی موردنظر را پیدا کنید
-                if (cookie.startsWith(name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue;
-    }
+
+
     var startUpload = function (files) {
         console.log("Uploading files:", files);
 
@@ -29,6 +38,7 @@
             var form = new FormData();
             form.append("file", files[i]);
             var accessToken = getCookie('jc');
+
 
             var settings = {
                 "url": "http://localhost:8000/api/upload/",
@@ -40,7 +50,19 @@
                 "processData": false,
                 "mimeType": "multipart/form-data",
                 "contentType": false,
-                "data": form
+                "data": form ,
+                xhr: function () {
+                    var xhr = new window.XMLHttpRequest();
+                    xhr.upload.addEventListener("progress",
+                        uploadProgressHandler,
+                        false
+                    );
+                    xhr.addEventListener("load", loadHandler, false);
+                    xhr.addEventListener("error", errorHandler, false);
+                    xhr.addEventListener("abort", abortHandler, false);
+
+                    return xhr;
+                }
             };
             $.ajax(settings)
                 .done(function (response) {

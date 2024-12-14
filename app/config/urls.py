@@ -21,8 +21,8 @@ from django.urls import path , include
 from django.contrib.auth.views import LoginView
 
 urlpatterns = [
+    path('login/' , LoginView.as_view() , name='login-view'),
     path('' , include('web.urls')),
-    path('login/' , LoginView.as_view() , name='login'),
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
