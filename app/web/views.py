@@ -45,10 +45,9 @@ class CreateFolderView(APIView):
     permission_classes = (IsAuthenticated,)
     authentication_classes = (JWTAuthentication,)
     def post(self, request):
-        userFolderName = request.FILES.get('folder-name')
+        userFolderName = request.POST.get('folder-name')
         pwd = request.POST.get('pwd')
 
-        file_type = user_file.content_type
         new_file = Object()
         new_file.owner = request.user
         new_file.name = userFolderName

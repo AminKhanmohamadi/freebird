@@ -69,7 +69,7 @@ function abortHandler(event) {
 
 
             var settings = {
-                "url": "http://localhost:8000/api/upload/",
+                "url": "/api/upload/",
                 "method": "POST",
                 "timeout": 0,
                 "headers": {
