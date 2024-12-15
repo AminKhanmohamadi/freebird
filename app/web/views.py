@@ -16,6 +16,7 @@ def homeview(request):
     response =render(request, 'web/home.html')
     refresh = RefreshToken.for_user(request.user)
     response.set_cookie('pwd' , '/root')
+    response.set_cookie('pwd_id' , '/root')
     response.set_cookie('jr' , str(refresh))
     response.set_cookie('jc' , str(refresh.access_token))
     return response
@@ -71,9 +72,17 @@ class OurObjectsView(APIView):
     authentication_classes = (JWTAuthentication,)
     def post(self, request):
         pwd = request.POST.get('pwd')
-        pwd = pwd.replace('"', '')
+        folderId = request.POST.get('folderId')
+        folderName = request.POST.get('folderName')
         owner = request.user
-        objects = Object.objects.filter(owner=owner , path=pwd)
+
+        if folderName == 'null':
+            objects = Object.objects.filter(owner=owner, path=pwd).exclude(trash=True)
+            print(pwd)
+        else:
+            targetPWD = f'{pwd}/{folderName}'
+            objects = Object.objects.filter(owner=owner , path=targetPWD).exclude(trash=True)
+            print(targetPWD)
 
         alldata = []
         for data in objects:
