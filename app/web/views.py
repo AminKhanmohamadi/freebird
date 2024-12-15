@@ -94,7 +94,7 @@ class OurObjectsView(APIView):
                 'created_at': data.created_at.strftime('%Y-%m-%d %H:%M'),
                 'updated_at': data.updated_at.strftime('%Y-%m-%d %H:%M'),
             })
-            print(alldata)
+
 
         content = {
             'msg': "Your objects",
