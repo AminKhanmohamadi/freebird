@@ -40,14 +40,21 @@ function createFolder() {
 }
 
 
-async function refreshObjects() {
+async function refreshObjects(folderId , folderName , modalflag=0) {
     $('#class-main-file-manager').html('');
-    var pwd = getCookie("pwd");
+    var pwd = getCookie('pwd').replace(/"/g,'');
     const myHeaders = new Headers();
     myHeaders.append("Authorization", "Bearer " + getCookie("jc"));
 
     const formdata = new FormData();
-    formdata.append("pwd", pwd);
+    if (modalflag == 0){
+        formdata.append("pwd", pwd);
+    }else {
+        formdata.append('pwd' , getBackwardPath(pwd));
+    }
+
+    formdata.append("folderId", folderId);
+    formdata.append("folderName", folderName );
 
     const requestOptions = {
         method: "POST",
@@ -65,7 +72,24 @@ async function refreshObjects() {
                 title: "Refreshed Data",
             });
 
+            if (folderName != null && folderId != null) {
+                if (modalflag == 0){
+                    var tmp_pwd = getCookie('pwd').replace(/"/g,'') + '/' + folderName;
+                    setCookie('pwd', tmp_pwd);
+                    setCookie('pwd_id', folderId);
+                }else {
+                    var tmp_pwd = getCookie('pwd').replace(/"/g,'');
+                    setCookie('pwd', tmp_pwd);
+                    setCookie('pwd_id', folderId);
+                }
+
+            }
+
+            var pwd = getCookie('pwd').replace(/"/g,'');
+            buildBackwardPathToolbar(pwd)
+
             data = content.data
+
             if (data.length == 0 || pwd != "/root") {
                 $('#class-main-file-manager').append(backItem());
             }
@@ -102,10 +126,6 @@ async function refreshObjects() {
                     $('#class-main-file-manager').append(otherItem(file_id, file_name, file_uploadfile));
                 }
             }
-
-
-
-
         } else {
             toastMixin.fire({
                 animation: true,
@@ -115,5 +135,28 @@ async function refreshObjects() {
         }
     } catch (error) {
         console.error("Error:", error);
+    }
+}
+
+
+function openToFolder(id , name) {
+    refreshObjects(id , name);
+
+}
+
+function backFromFolder(){
+    var pwd = getCookie('pwd');
+    var backwardpath = getBackwardPath(pwd);
+    if (backwardpath == '/root'){
+        console.log("in backward");
+        setCookie("pwd", backwardpath);
+        setCookie("pwd_id", backwardpath);
+        refreshObjects(null,null);
+    } else {
+        console.log("in backward");
+        setCookie("pwd", backwardpath);
+        setCookie("pwd_id", backwardpath);
+        refreshObjects(null,null);
+
     }
 }
