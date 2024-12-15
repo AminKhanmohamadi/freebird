@@ -37,9 +37,10 @@ function setCookie(cname, cvalue, exdays) {
 }
 
 function humanFileSize(size) {
-    var i = size == 0 ? 0 : Math.floor(Math.log(size) / Math.log(1024));
-    return +((size / Math.pow(1024 , i)).toFixed(2)) * 1 + ' ' + ['B' , 'KB' , 'MB' , 'GB' , 'TB'][i];
+  var i = size == 0 ? 0 : Math.floor(Math.log(size) / Math.log(1024));
+  return +((size / Math.pow(1024, i)).toFixed(2)) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
 }
+
 
 function getBackwardPath(path){
   var folders = path.split("/");
@@ -48,4 +49,16 @@ function getBackwardPath(path){
     backwardPath += "/" + folders[i]
   }
   return backwardPath;
+}
+
+
+function refreshObjectsHere(){
+  var folderId = getCookie('pwd_id').replace(/"/g,'');
+  var fullpath = getCookie('pwd').replace(/"/g,'').split('/');
+  var folderName = fullpath[fullpath.length - 1]
+  if (folderId == '/root' && folderName == '/root'){
+      refreshObjects(null,null);
+  } else {
+      refreshObjects(folderId,folderName, 1);
+  }
 }
