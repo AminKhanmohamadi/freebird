@@ -65,6 +65,7 @@ function abortHandler(event) {
             uploadedFileName = file.name;
             var form = new FormData();
             form.append("file", files[i]);
+            form.append("user-file-path", '/root');
             var accessToken = getCookie('jc');
 
 

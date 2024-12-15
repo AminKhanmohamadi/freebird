@@ -26,6 +26,8 @@ class UploadFileView(APIView):
     authentication_classes = (JWTAuthentication,)
     def post(self, request):
         user_file = request.FILES.get('file')
+        userFilePath = request.POST.get('user-file-path')
+        userFilePath = userFilePath.replace('"', '')
         file_type = user_file.content_type
         new_file = Object()
         new_file.owner = request.user
@@ -33,6 +35,7 @@ class UploadFileView(APIView):
         new_file.type = 'file'
         new_file.file_type = file_type
         new_file.uploadfile = user_file
+        new_file.path = userFilePath
         new_file.save()
         content = {
             'msg':'Success upload file',
@@ -47,6 +50,7 @@ class CreateFolderView(APIView):
     def post(self, request):
         userFolderName = request.POST.get('folder-name')
         pwd = request.POST.get('pwd')
+        pwd = pwd.replace('"', '')
 
         new_file = Object()
         new_file.owner = request.user
@@ -59,3 +63,42 @@ class CreateFolderView(APIView):
             'data': None
         }
         return Response(content ,status=status.HTTP_201_CREATED)
+
+
+
+class OurObjectsView(APIView):
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (JWTAuthentication,)
+    def post(self, request):
+        pwd = request.POST.get('pwd')
+        pwd = pwd.replace('"', '')
+        owner = request.user
+        objects = Object.objects.filter(owner=owner , path=pwd)
+
+        alldata = []
+        for data in objects:
+            if data.type == 'file':
+                dataurl = data.uploadfile.url
+            else:
+                dataurl = None
+            alldata.append({
+                'id': data.id,
+                'owner': data.owner.username,
+                'name': data.name,
+                'type': data.type,
+                'uploadfile': dataurl,
+                'file_type': data.file_type,
+                'size': data.size,
+                'pwd': data.path,
+                'stared': data.stared,
+                'created_at': data.created_at.strftime('%Y-%m-%d %H:%M'),
+                'updated_at': data.updated_at.strftime('%Y-%m-%d %H:%M'),
+            })
+            print(alldata)
+
+        content = {
+            'msg': "Your objects",
+            'data': alldata,
+
+        }
+        return Response(content ,status=status.HTTP_200_OK)

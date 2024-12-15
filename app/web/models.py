@@ -36,5 +36,4 @@ class Object(models.Model):
     def save(self, *args, **kwargs):
         if self.uploadfile:
             self.size = convert_size(self.uploadfile.size)
-            self.path = self.uploadfile.path
         super().save(*args, **kwargs)
