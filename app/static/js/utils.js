@@ -29,16 +29,23 @@ function getCookie(name) {
     return cookieValue;
 }
 
+function setCookie(cname, cvalue, exdays) {
+  const d = new Date();
+  d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+  let expires = "expires="+d.toUTCString();
+  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
 
 function humanFileSize(size) {
     var i = size == 0 ? 0 : Math.floor(Math.log(size) / Math.log(1024));
     return +((size / Math.pow(1024 , i)).toFixed(2)) * 1 + ' ' + ['B' , 'KB' , 'MB' , 'GB' , 'TB'][i];
 }
 
-
-function setCookie(cname, cvalue, exdays) {
-  const d = new Date();
-  d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
-  let expires = "expires="+d.toUTCString();
-  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+function getBackwardPath(path){
+  var folders = path.split("/");
+  var backwardPath = "";
+  for (i=1; i<folders.length - 1 ; i++){
+    backwardPath += "/" + folders[i]
+  }
+  return backwardPath;
 }
