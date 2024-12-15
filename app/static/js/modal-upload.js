@@ -24,7 +24,9 @@ function loadHandler(event) {
     if (progress == 100) {
         $('#modal-upload-progressbar').attr('class', 'progress-bar bg-success');
         $('#modal-listof-uploaded').prepend("<a href='#' class='list-group-item list-group-item-success text-success'>"+uploadedFileName+"</a>");
-        refreshObjects();
+
+        refreshObjectsHere();
+
     }
 }
 
@@ -63,9 +65,11 @@ function abortHandler(event) {
         for (let i = 0; i < files.length; i++) {
             var file = files[i];
             uploadedFileName = file.name;
+            var pwd = getCookie('pwd').replace(/"/g,'');
+
             var form = new FormData();
             form.append("file", files[i]);
-            form.append("user-file-path", '/root');
+            form.append("user-file-path", pwd);
             var accessToken = getCookie('jc');
 
 

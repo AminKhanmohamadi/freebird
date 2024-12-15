@@ -28,7 +28,6 @@ class UploadFileView(APIView):
     def post(self, request):
         user_file = request.FILES.get('file')
         userFilePath = request.POST.get('user-file-path')
-        userFilePath = userFilePath.replace('"', '')
         file_type = user_file.content_type
         new_file = Object()
         new_file.owner = request.user
