@@ -3,6 +3,7 @@ $(document).ready(function () {
         createFolder()
     });
     $("#button-main-refresh-objects").click(function () {
-        refreshObjects();
+        refreshObjectsHere();
     });
+    refreshObjects(null , null);
 });
